@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+body {
+    background-color: #1b1b1b;
+    color : #f1f1f1;
+    font-family: 'Mulish', 'regular';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 100px;
+    overflow: hidden;
+}
+#car-name{
+    font-family: 'Mulish', extra-light;
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: none;
+}
+
+#search-btn{
+    color: #d4d4d4;
+    background-color: transparent;
+    font-size: larger;
+    backdrop-filter: blur(200px);
+    font-family: 'Mulish', regular;
+    padding: 10px 20px;
+    border-radius: 45px;
+    border: none;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+#search-btn:hover{
+    background-color: #f1f1f171;
+    color: #1b1b1b;
+}
+
+#background-blur{
+    position: fixed;
+    filter: blur(60px);
+    width: 300px;
+    height: 600px;
+    top: 200px;
+    z-index: -1;
+    animation: changeColor 2s infinite;
+}
+@keyframes changeColor {
+    0% {
+        background-color: #860292; 
+    }
+    33% {
+        background-color: #5d0292;
+    }   
+    66% {
+        background-color: #390292;
+    }
+    100% {
+        background-color: #860292;
+    }
+}
+.glass{
+    backdrop-filter: blur(200px);
+    margin-top: 40px;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0px 0px 28px 0px #000000;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

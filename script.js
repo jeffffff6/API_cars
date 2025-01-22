@@ -1,42 +1,74 @@
 const apiKey = 'zY06GiIYYAuAAGsuQsYTkQ==yeeY99KdI0H0PzVz';
 
 document.getElementById('search-btn').addEventListener('click', () => {
-    // Obtener el valor del campo de texto
+
     const carName = document.getElementById('car-name').value.toLowerCase();
 
     const apiUrl = `https://api.api-ninjas.com/v1/cars?model=${carName}`;
 
-    // Hacer la solicitud a la API
+    fetchCarData(apiUrl);
+});
+
+function fetchCarData(apiUrl) {
     fetch(apiUrl, {
         method: 'GET',
         headers: {
             'X-Api-Key': apiKey
         }
     })
-        .then(response => {
+        .then(response => handleApiResponse(response))
+        .then(data => renderCarInfo(data))
+        .catch(error => handleError(error));
+}
+
+function handleApiResponse(response) {
+    if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+    }
+    return response.json();
+}
+
+function renderCarInfo(data) {
+    const carInfoDiv = document.getElementById('car-info');
+    if (data.length === 0) {
+        carInfoDiv.innerHTML = '<p>No se encontraron datos para este coche.</p>';
+    } else {
+        const car = data[0];
+        carInfoDiv.innerHTML = `
+            <h2 style="text-align: center;">Información del coche</h2>
+            <p style="margin-left: 20px;"><strong>Modelo:</strong> ${car.model}</p>
+            <p style="margin-left: 20px;"><strong>Fabricante:</strong> ${car.make}</p>
+            <p style="margin-left: 20px;"><strong>Año:</strong> ${car.year}</p>
+            <p style="margin-left: 20px;"><strong>Tipo de motor:</strong> ${car.fuel_type}</p>
+            <div id="car-image" style="overflow: hidden;">
+                <p>Cargando imagen del modelo...</p>
+            </div>
+        `;
+        fetchCarImage(car.make + ' ' + car.model + ' ' + car.year);
+    }
+}
+
+function fetchCarImage(model) {
+    const accesKey = "KWJ9ohpQgiuehupYVESMJJlp2OBNafJ6cJ65jrYKPJc"
+    const imageApiUrl = `https://api.unsplash.com/search/photos?query=${model}&client_id=${accesKey}`;
+
+    fetch(imageApiUrl).then(response => {
             if (!response.ok) {
-                throw new Error(`Error: ${response.status} ${response.statusText}`);
+                throw new Error(`Error al buscar imagen: ${response.status} ${response.statusText}`);
             }
             return response.json();
         })
         .then(data => {
-            // Mostrar los datos en el div con ID 'car-info'
-            const carInfoDiv = document.getElementById('car-info');
-            if (data.length === 0) {
-                carInfoDiv.innerHTML = '<p>No se encontraron datos para este coche.</p>';
+            const imageDiv = document.getElementById('car-image');
+            if (data.results.length > 0) {
+                const imageUrl = data.results[0].urls.small;
+                imageDiv.innerHTML = `<img src="${imageUrl}" alt="Imagen de ${model}" style="max-width:350px;margin:0;padding:0;display:block;">`;
             } else {
-                const car = data[0]; // Tomar el primer resultado
-                carInfoDiv.innerHTML = `
-                    <h2>Información del coche</h2>
-                    <p><strong>Modelo:</strong> ${car.model}</p>
-                    <p><strong>Fabricante:</strong> ${car.make}</p>
-                    <p><strong>Año:</strong> ${car.year}</p>
-                    <p><strong>Tipo de motor:</strong> ${car.fuel_type}</p>
-                `;
+                imageDiv.innerHTML = '<p>No se encontró una imagen para este modelo.</p>';
             }
         })
         .catch(error => {
-            console.error('Error:', error);
-            document.getElementById('car-info').innerHTML = `<p>Error al buscar información del coche: ${error.message}</p>`;
+            console.error('Error al buscar imagen:', error);
+            document.getElementById('car-image').innerHTML = '<p>Error al cargar la imagen.</p>';
         });
-});
+}
