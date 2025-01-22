@@ -11,8 +11,14 @@ body {
     margin-top: 100px;
     overflow: hidden;
 }
+#title{
+    font-family: 'Mulish', extra-light;
+    font-size: 70px;
+    margin-bottom: 20px;
+}
 #car-name{
     font-family: 'Mulish', extra-light;
+    font-size: 20px;
     padding: 10px 20px;
     border-radius: 12px;
     border: none;
